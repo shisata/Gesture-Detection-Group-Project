@@ -19,7 +19,7 @@ OUTPUT_TEMPLATE_CLASSFIER = {
 #predicts and saves classification report to report.txt
 #each classification is in order from bayes to forest
 #all models are in single file for easier viewing
-def clf_classification_report(m, y_test):
+def clf_classification_report(m, X_test, y_test):
     y_pred = m.predict(X_test)
     with open('classification_report.txt', 'a') as f:
         f.write((classification_report(y_test, y_pred)))
@@ -44,7 +44,7 @@ def analyze_data():
     #fits each model and gets classification report
     for i, m in enumerate(models):
         m.fit(X_train, y_train)
-        clf_classification_report(m, y_test)
+        clf_classification_report(m, X_test, y_test)
 
     #prints the score of each model
     #for further analysis look at report.txt
