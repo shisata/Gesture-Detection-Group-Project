@@ -2,7 +2,6 @@ import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
@@ -48,15 +47,26 @@ def enumerate_y(y):
         if(m == 'V'):
             V += 1;
     return [O,S,V]
+
+#taken from stackoverflow
+#returns percentage and value
+def make_autopct(values):
+    def my_autopct(pct):
+        total = sum(values)
+        val = int(round(pct*total/100.0))
+        return '{p:.2f}%  ({v:d})'.format(p=pct,v=val)
+    return my_autopct
         
 #plots pie plot for the different shapes
 #saves each plot in png file
 def plot_predictions(count, label):
     fig = plt.figure(figsize=(5,5))
     shapes = ['O', 'S', 'V']
-    plt.pie(count, labels=shapes, autopct='%.2f%%')
+    #labels don't seem to show
+    plt.pie(count, labels=shapes,textprops={'color':'white', 'weight':'bold', 'fontsize':12.5}, autopct=make_autopct(count))
     plt.title(label)
     
+    plt.legend()
     plt.savefig(label)
     plt.show()
     plt.close(fig)
@@ -114,4 +124,3 @@ def analyze_data():
         nn = nn_clf.score(X_test, y_test),
         forest = forest_clf.score(X_test, y_test),
     ))
-
