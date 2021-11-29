@@ -39,12 +39,12 @@ def enumerate_y(y):
     S = 0
     V = 0
     
-    for i, m in enumerate(y):
-        if(m == 'O'):
+    for i in (y):
+        if(i == 'O'):
             O += 1;
-        if(m == 'S'):
+        if(i == 'S'):
             S += 1;
-        if(m == 'V'):
+        if(i == 'V'):
             V += 1;
     return [O,S,V]
 
@@ -62,19 +62,18 @@ def make_autopct(values):
 def plot_predictions(count, label):
     fig = plt.figure(figsize=(5,5))
     shapes = ['O', 'S', 'V']
-    #labels don't seem to show
     plt.pie(count, labels=shapes,textprops={'color':'white', 'weight':'bold', 'fontsize':12.5}, autopct=make_autopct(count))
     plt.title(label)
     
     plt.legend()
     plt.savefig(label)
-    plt.show()
+    # plt.show()
     plt.close(fig)
         
 def analyze_data():
     print("Analyzing cleaned data")
     # TODO: read data from files
-    data = pd.read_csv('cleaned_data/clean_data.csv')
+    data = pd.read_csv('cleaned_data/result.csv')
     X = (data.iloc[:, -11:])
     y = data['shape']
     # TODO: analyze
