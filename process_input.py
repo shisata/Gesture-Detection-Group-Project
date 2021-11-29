@@ -7,7 +7,7 @@ input_folder = "input_data"
 output_folder = "cleaned_data"
 
 
-def main():
+def process_inputs():
     # Form master dataframe
     column_names = ['user', 'age', 'dominant_hand','shape', 'hand_used', 'acc_x-std','acc_y-std', 'acc_z-std', 'g-force_x-std', 'g-force_y-std', 'g-force_z-std', 'acc_x-peaks', 'acc_y-peaks', 'acc_z-peaks', 'g-force_x-peaks', 'g-force_y-peaks', 'g-force_z-peaks']
     master = pd.DataFrame(columns=column_names)
@@ -62,5 +62,3 @@ def main():
     # store master df as csv
     master.to_csv(output_folder + '/result.csv')
 
-if __name__ == "__main__":
-    main()
