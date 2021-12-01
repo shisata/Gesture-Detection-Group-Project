@@ -91,21 +91,21 @@ def analyze_data():
     
 #     knn_clf = make_pipeline(
 #         StandardScaler(),
-#         KNeighborsClassifier(n_neighbors=3)
+#         KNeighborsClassifier(n_neighbors=7)
 #     )
-    knn_clf = KNeighborsClassifier(n_neighbors=3)
+    knn_clf = KNeighborsClassifier(n_neighbors=7)
     
 #     nn_clf = make_pipeline(
 #         StandardScaler(),
-#         MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(6,), random_state=1)
+#         MLPClassifier(solver='lbfgs', hidden_layer_sizes=(6,), max_iter=10000)
 #     )
-    nn_clf = MLPClassifier(solver='lbfgs', alpha=1e-3, hidden_layer_sizes=(6,), random_state=1)
+    nn_clf = MLPClassifier(random_state=1, max_iter=10000)
     
 #     forest_clf = make_pipeline(
 #         StandardScaler(),
 #         RandomForestClassifier()
 #     )
-    forest_clf = RandomForestClassifier()
+    forest_clf = RandomForestClassifier(criterion="entropy")
     
     models = [bayes_clf, knn_clf, nn_clf, forest_clf]
     labels = ["Naive Bayes", "K Neighbor", "Neural Network", "Random Forest"]
