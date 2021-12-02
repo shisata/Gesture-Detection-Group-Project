@@ -12,6 +12,9 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.ensemble import RandomForestClassifier
 
+input_folder = "cleaned_data"
+output_folder = "analyzed_data"
+
 OUTPUT_TEMPLATE_CLASSIFIER = (
     'Bayesian classifier: {bayes:.3g}\n'
     'k-Neighbors classifier: {knn:.3g}\n'
@@ -27,7 +30,7 @@ def clf_classification_report(label, m, X_test, y_test):
     shape_count = enumerate_y(y_pred)
     plot_predictions(shape_count, label)
     report = classification_report(y_test, y_pred)
-    with open('classification_report.txt', 'a') as f:
+    with open(output_folder + '/' + 'classification_report.txt', 'a') as f:
         f.write('''\b'''+label+'\n')
         f.write(report)
         f.write('\n\n')
@@ -66,14 +69,14 @@ def plot_predictions(count, label):
     plt.title(label)
     
     plt.legend()
-    plt.savefig(label)
+    plt.savefig(output_folder + '/' + label)
     # plt.show()
     plt.close(fig)
         
 def analyze_data():
     print("Analyzing cleaned data")
     # TODO: read data from files
-    data = pd.read_csv('cleaned_data/result.csv')
+    data = pd.read_csv(input_folder + '/' + '/result.csv')
     X = (data.iloc[:, -11:])
     y = data['shape']
     # TODO: analyze
