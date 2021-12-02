@@ -14,6 +14,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 input_folder = "cleaned_data"
 output_folder = "analyzed_data"
+report_file = "classification_report.txt"
 
 OUTPUT_TEMPLATE_CLASSIFIER = (
     'Bayesian classifier: {bayes:.3g}\n'
@@ -21,6 +22,54 @@ OUTPUT_TEMPLATE_CLASSIFIER = (
     'Neural Network classifier: {nn:.3g}\n'
     'Random Forest classifier: {forest:.3g}\n'
 )
+
+# Convert DataFrame Columns into numbers so that models can read them
+def numerize_data(data):
+    # Hand_used: L = 0, R = 1
+    if (data['hand_used'] == 'L'):
+        data['hand_used'] = 0
+    else:
+        data['hand_used'] = 1
+
+    # Shape: O = 0, S = 1, V = 2
+    if (data['shape'] == 'O'):
+        data['shape'] = 0
+    elif (data['shape'] == 'S'):
+        data['shape'] = 1
+    else:
+        data['shape'] = 2
+
+    # Dominant_hand: L = 0, R = 1
+    if (data['dominant_hand'] == 'L'):
+        data['dominant_hand'] = 0
+    else:
+        data['dominant_hand'] = 1
+
+    # User number only
+    start_index = len('user')
+    data['user_no'] = int(data['user'][start_index:])
+    return data
+
+# Return necessary dataframes for models to analyze (choose only necessary columns for X)
+def get_stacked_dataframe(data):
+    # X = (data.iloc[:, -12:]) # From acc_x-std to  g-force_z-peaks
+    X = data.iloc[:,-17:] # From user to g-force_z-peaks
+    
+    X['user_no'] = 0 # Add column to numerize user column
+    X = X.apply(numerize_data, axis = 1)
+    X = X.drop(columns=['user', 'shape'])
+    # print(X)
+
+    y = data['shape']
+    return X, y
+
+# Removes existing report file
+def remove_report_file(report_file):
+    filepath = output_folder + '/' + report_file
+    if os.path.exists(filepath):
+        print("<Removing existing report file: " + report_file + ">")
+        os.remove(filepath)
+
 
 #predicts and saves classification report to report.txt
 #each classification is in order from bayes to forest
@@ -30,7 +79,7 @@ def clf_classification_report(label, m, X_test, y_test):
     shape_count = enumerate_y(y_pred)
     plot_predictions(shape_count, label)
     report = classification_report(y_test, y_pred)
-    with open(output_folder + '/' + 'classification_report.txt', 'a') as f:
+    with open(output_folder + '/' + report_file, 'a') as f:
         f.write('''\b'''+label+'\n')
         f.write(report)
         f.write('\n\n')
@@ -76,9 +125,8 @@ def plot_predictions(count, label):
 def analyze_data():
     print("Analyzing cleaned data")
     # TODO: read data from files
-    data = pd.read_csv(input_folder + '/' + '/result.csv')
-    X = (data.iloc[:, -11:])
-    y = data['shape']
+    data = pd.read_csv(input_folder + '/' + 'result.csv')
+    X, y = get_stacked_dataframe(data)
     # TODO: analyze
     X_train, X_test, y_train, y_test = train_test_split(X,y, test_size = 0.25, random_state = 1)
     
@@ -113,6 +161,9 @@ def analyze_data():
     models = [bayes_clf, knn_clf, nn_clf, forest_clf]
     labels = ["Naive Bayes", "K Neighbor", "Neural Network", "Random Forest"]
     
+    #removes existing classification report, preventing new data stacking on old data
+    remove_report_file(report_file)
+
     #fits each model and gets classification report
     for i, m in enumerate(models):
         m.fit(X_train, y_train)
