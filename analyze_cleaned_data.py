@@ -17,11 +17,21 @@ output_folder = "analyzed_data"
 report_file = "classification_report.txt"
 
 OUTPUT_TEMPLATE_CLASSIFIER = (
+    '-Without Tranformation-\n'
     'Bayesian classifier: {bayes:.3g}\n'
     'k-Neighbors classifier: {knn:.3g}\n'
     'Neural Network classifier: {nn:.3g}\n'
     'Random Forest classifier: {forest:.3g}\n'
 )
+
+OUTPUT_TEMPLATE_CLASSIFIER_TRANSFORM = (
+    '-With Transformation-\n'
+    'Bayesian classifier: {bayes:.3g}\n'
+    'k-Neighbors classifier: {knn:.3g}\n'
+    'Neural Network classifier: {nn:.3g}\n'
+    'Random Forest classifier: {forest:.3g}\n'
+)
+
 
 # Convert DataFrame Columns into numbers so that models can read them
 def numerize_data(data):
@@ -54,7 +64,7 @@ def numerize_data(data):
 def get_stacked_dataframe(data):
     # X = (data.iloc[:, -12:]) # From acc_x-std to  g-force_z-peaks
     X = data.iloc[:,-17:] # From user to g-force_z-peaks
-    
+ 
     X['user_no'] = 0 # Add column to numerize user column
     X = X.apply(numerize_data, axis = 1)
     X = X.drop(columns=['user', 'shape'])
@@ -71,6 +81,10 @@ def remove_report_file(report_file):
         os.remove(filepath)
 
 
+def write_title_to_report(title):
+    with open(output_folder + '/' + report_file, 'a') as f:
+        f.write('-----' + title + '-----\n')
+
 #predicts and saves classification report to report.txt
 #each classification is in order from bayes to forest
 #all models are in single file for easier viewing
@@ -79,6 +93,7 @@ def clf_classification_report(label, m, X_test, y_test):
     shape_count = enumerate_y(y_pred)
     plot_predictions(shape_count, label)
     report = classification_report(y_test, y_pred)
+    
     with open(output_folder + '/' + report_file, 'a') as f:
         f.write('''\b'''+label+'\n')
         f.write(report)
@@ -134,46 +149,68 @@ def analyze_data():
     title = "y_test"
     plot_predictions(test_shape_count, title)
     
-#     bayes_clf = make_pipeline(
-#         StandardScaler(),
-#         GaussianNB()
-#     )
     bayes_clf = GaussianNB()
+    bayes_clf_pipeline = make_pipeline(
+        StandardScaler(),
+        # PCA(10),
+        GaussianNB()
+    )
     
-#     knn_clf = make_pipeline(
-#         StandardScaler(),
-#         KNeighborsClassifier(n_neighbors=7)
-#     )
     knn_clf = KNeighborsClassifier(n_neighbors=7)
+    knn_clf_pipeline = make_pipeline(
+        StandardScaler(),
+        # PCA(10),
+        KNeighborsClassifier(n_neighbors=7)
+    )
     
-#     nn_clf = make_pipeline(
-#         StandardScaler(),
-#         MLPClassifier(solver='lbfgs', hidden_layer_sizes=(6,), max_iter=10000)
-#     )
-    nn_clf = MLPClassifier(random_state=1, max_iter=10000)
+    # nn_clf = MLPClassifier(random_state=1, max_iter=10000)
+    nn_clf = MLPClassifier(solver='lbfgs', alpha=1e-3, hidden_layer_sizes=(6,), random_state=1, max_iter=10000)
+    nn_clf_pipeline = make_pipeline(
+        StandardScaler(),
+        # PCA(10),
+        MLPClassifier(solver='lbfgs', alpha=1e-3, hidden_layer_sizes=(6,), random_state=1, max_iter=10000)
+    )
     
-#     forest_clf = make_pipeline(
-#         StandardScaler(),
-#         RandomForestClassifier()
-#     )
     forest_clf = RandomForestClassifier(criterion="entropy")
+    forest_clf_pipeline = make_pipeline(
+        StandardScaler(),
+        # PCA(10),
+        RandomForestClassifier(criterion="entropy")
+    )
     
     models = [bayes_clf, knn_clf, nn_clf, forest_clf]
+    models_pipeline = [bayes_clf_pipeline, knn_clf_pipeline, nn_clf_pipeline, forest_clf_pipeline]
     labels = ["Naive Bayes", "K Neighbor", "Neural Network", "Random Forest"]
     
     #removes existing classification report, preventing new data stacking on old data
     remove_report_file(report_file)
 
     #fits each model and gets classification report
+    write_title_to_report("Without Transformation")
     for i, m in enumerate(models):
+        m.fit(X_train, y_train)
+        clf_classification_report(labels[i], m, X_test, y_test)
+
+    #fits each model_pipeline and gets classification report
+    write_title_to_report("With Transformation")
+    for i, m in enumerate(models_pipeline):
         m.fit(X_train, y_train)
         clf_classification_report(labels[i], m, X_test, y_test)
 
     #prints the score of each model
     #for further analysis look at report.txt
+    #Without Tranformation
     print(OUTPUT_TEMPLATE_CLASSIFIER.format(
         bayes = bayes_clf.score(X_test, y_test),
         knn = knn_clf.score(X_test, y_test),
         nn = nn_clf.score(X_test, y_test),
         forest = forest_clf.score(X_test, y_test),
+    ))
+
+    #With Tranformation
+    print(OUTPUT_TEMPLATE_CLASSIFIER_TRANSFORM.format(
+        bayes = bayes_clf_pipeline.score(X_test, y_test),
+        knn = knn_clf_pipeline.score(X_test, y_test),
+        nn = nn_clf_pipeline.score(X_test, y_test),
+        forest = forest_clf_pipeline.score(X_test, y_test),
     ))
