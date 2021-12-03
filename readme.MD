@@ -15,14 +15,22 @@
  - input_data will be the collected data with the following folder structure
 
 ```
- input_data
-    User1
-        left-hand
-            files
-        right-hand
-            files
-    User2
-        ...
+user1
+    left-hand
+        <.csv files>
+    right-hand
+        <.csv files>
+    age.txt
+    dominant_hand.txt
+user2
+    left-hand
+        <.csv files>
+    right-hand
+        <.csv files>
+    age.txt
+    dominant_hand.txt
+user3
+    ...
 ```
  - cleaned_data will be where we export cleaned input data
 ## How to read the data
