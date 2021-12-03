@@ -2,6 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
@@ -13,6 +14,7 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.ensemble import RandomForestClassifier
 
 input_folder = "cleaned_data"
+input_file = "result.csv"
 output_folder = "analyzed_data"
 report_file = "classification_report.txt"
 
@@ -63,6 +65,7 @@ def numerize_data(data):
 # Return necessary dataframes for models to analyze (choose only necessary columns for X)
 def get_stacked_dataframe(data):
     # X = (data.iloc[:, -12:]) # From acc_x-std to  g-force_z-peaks
+    print("Numerizing data for model predictions")
     X = data.iloc[:,-17:] # From user to g-force_z-peaks
  
     X['user_no'] = 0 # Add column to numerize user column
@@ -77,7 +80,7 @@ def get_stacked_dataframe(data):
 def remove_report_file(report_file):
     filepath = output_folder + '/' + report_file
     if os.path.exists(filepath):
-        print("<Removing existing report file: " + report_file + ">")
+        print("Removing existing report file: " + report_file)
         os.remove(filepath)
 
 
@@ -127,6 +130,7 @@ def make_autopct(values):
 #plots pie plot for the different shapes
 #saves each plot in png file
 def plot_predictions(count, label):
+    print("Exporting image for prediction: " + label)
     fig = plt.figure(figsize=(5,5))
     shapes = ['O', 'S', 'V']
     plt.pie(count, labels=shapes,textprops={'color':'white', 'weight':'bold', 'fontsize':12.5}, autopct=make_autopct(count))
@@ -138,9 +142,9 @@ def plot_predictions(count, label):
     plt.close(fig)
         
 def analyze_data():
-    print("Analyzing cleaned data")
+    print("Reading processed data from " + input_folder + ": " + input_file)
     # TODO: read data from files
-    data = pd.read_csv(input_folder + '/' + 'result.csv')
+    data = pd.read_csv(input_folder + '/' + input_file)
     X, y = get_stacked_dataframe(data)
     # TODO: analyze
     X_train, X_test, y_train, y_test = train_test_split(X,y, test_size = 0.25, random_state = 1)
@@ -181,10 +185,12 @@ def analyze_data():
     models = [bayes_clf, knn_clf, nn_clf, forest_clf]
     models_pipeline = [bayes_clf_pipeline, knn_clf_pipeline, nn_clf_pipeline, forest_clf_pipeline]
     labels = ["Naive Bayes", "K Neighbor", "Neural Network", "Random Forest"]
+    labels_pipeline = ["Naive Bayes With Transformation", "K Neighbor With Transformation", "Neural Network With Transformation", "Random Forest With Transformation"]
     
     #removes existing classification report, preventing new data stacking on old data
     remove_report_file(report_file)
 
+    print("Writing new report file: " + report_file)
     #fits each model and gets classification report
     write_title_to_report("Without Transformation")
     for i, m in enumerate(models):
@@ -195,8 +201,9 @@ def analyze_data():
     write_title_to_report("With Transformation")
     for i, m in enumerate(models_pipeline):
         m.fit(X_train, y_train)
-        clf_classification_report(labels[i], m, X_test, y_test)
+        clf_classification_report(labels_pipeline[i], m, X_test, y_test)
 
+    print("Results of prediction models score")
     #prints the score of each model
     #for further analysis look at report.txt
     #Without Tranformation
@@ -214,3 +221,5 @@ def analyze_data():
         nn = nn_clf_pipeline.score(X_test, y_test),
         forest = forest_clf_pipeline.score(X_test, y_test),
     ))
+
+    print("Done analysis!! Results can be seen in: " + output_folder)
