@@ -36,12 +36,13 @@ data_cols=['ax','ay','az','gFx','gFy','gFz']
 def clean_data(file, data, user, age, hand, dominant_hand):
     # Array containing standard deviations of columns
     data_std = data.std()
+    data_mean = data.mean()
     peak_list = list()
 
     # Counting peaks
     for x in data_cols:
-        upper = (data_std[x] * 1.3)/2
-        lower = upper * -1
+        upper = (data_mean[x] + data_std[x] * 1.28)
+        lower = (data_mean[x] - data_std[x] * 1.28)
 
         # Removing all the noise, only want highest peaks and lowest valleys
         peaks = data[(data[x] > upper) | (data[x] < lower)]
