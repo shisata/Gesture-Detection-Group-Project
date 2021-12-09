@@ -2,97 +2,97 @@
 Naive Bayes
               precision    recall  f1-score   support
 
-           O       0.56      0.79      0.66        28
-           S       0.70      0.52      0.60        27
-           V       1.00      0.86      0.92        28
+           O       0.00      0.00      0.00        24
+           S       0.59      1.00      0.74        27
+           V       0.81      0.91      0.85        32
 
-    accuracy                           0.72        83
-   macro avg       0.75      0.72      0.73        83
-weighted avg       0.76      0.72      0.73        83
+    accuracy                           0.67        83
+   macro avg       0.46      0.64      0.53        83
+weighted avg       0.50      0.67      0.57        83
 
 
 K Neighbor
               precision    recall  f1-score   support
 
-           O       0.50      0.39      0.44        28
-           S       0.57      0.44      0.50        27
-           V       0.62      0.89      0.74        28
+           O       0.83      0.83      0.83        24
+           S       0.93      1.00      0.96        27
+           V       0.93      0.88      0.90        32
 
-    accuracy                           0.58        83
-   macro avg       0.57      0.58      0.56        83
-weighted avg       0.57      0.58      0.56        83
+    accuracy                           0.90        83
+   macro avg       0.90      0.90      0.90        83
+weighted avg       0.90      0.90      0.90        83
 
 
 Neural Network
               precision    recall  f1-score   support
 
-           O       0.96      0.93      0.95        28
-           S       0.93      1.00      0.96        27
-           V       1.00      0.96      0.98        28
+           O       0.79      0.96      0.87        24
+           S       0.93      0.96      0.95        27
+           V       1.00      0.81      0.90        32
 
-    accuracy                           0.96        83
-   macro avg       0.96      0.96      0.96        83
-weighted avg       0.97      0.96      0.96        83
+    accuracy                           0.90        83
+   macro avg       0.91      0.91      0.90        83
+weighted avg       0.92      0.90      0.90        83
 
 
 Random Forest
               precision    recall  f1-score   support
 
-           O       0.85      0.82      0.84        28
-           S       0.92      0.89      0.91        27
-           V       0.90      0.96      0.93        28
+           O       0.89      1.00      0.94        24
+           S       0.96      0.96      0.96        27
+           V       1.00      0.91      0.95        32
 
-    accuracy                           0.89        83
-   macro avg       0.89      0.89      0.89        83
-weighted avg       0.89      0.89      0.89        83
+    accuracy                           0.95        83
+   macro avg       0.95      0.96      0.95        83
+weighted avg       0.96      0.95      0.95        83
 
 
 -----With Transformation-----
 Naive Bayes With Transformation
               precision    recall  f1-score   support
 
-           O       0.56      0.79      0.66        28
-           S       0.70      0.52      0.60        27
-           V       1.00      0.86      0.92        28
+           O       0.00      0.00      0.00        24
+           S       0.59      1.00      0.74        27
+           V       0.81      0.91      0.85        32
 
-    accuracy                           0.72        83
-   macro avg       0.75      0.72      0.73        83
-weighted avg       0.76      0.72      0.73        83
+    accuracy                           0.67        83
+   macro avg       0.46      0.64      0.53        83
+weighted avg       0.50      0.67      0.57        83
 
 
 K Neighbor With Transformation
               precision    recall  f1-score   support
 
-           O       0.71      0.79      0.75        28
-           S       0.81      0.63      0.71        27
-           V       0.84      0.93      0.88        28
+           O       0.91      0.83      0.87        24
+           S       0.87      1.00      0.93        27
+           V       0.97      0.91      0.94        32
 
-    accuracy                           0.78        83
-   macro avg       0.79      0.78      0.78        83
-weighted avg       0.79      0.78      0.78        83
+    accuracy                           0.92        83
+   macro avg       0.92      0.91      0.91        83
+weighted avg       0.92      0.92      0.91        83
 
 
 Neural Network With Transformation
               precision    recall  f1-score   support
 
-           O       0.92      0.82      0.87        28
-           S       0.93      0.93      0.93        27
-           V       0.87      0.96      0.92        28
+           O       0.84      0.88      0.86        24
+           S       0.93      1.00      0.96        27
+           V       0.93      0.84      0.89        32
 
     accuracy                           0.90        83
-   macro avg       0.91      0.90      0.90        83
-weighted avg       0.91      0.90      0.90        83
+   macro avg       0.90      0.91      0.90        83
+weighted avg       0.90      0.90      0.90        83
 
 
 Random Forest With Transformation
               precision    recall  f1-score   support
 
-           O       0.89      0.89      0.89        28
-           S       0.93      0.93      0.93        27
-           V       0.96      0.96      0.96        28
+           O       0.89      1.00      0.94        24
+           S       1.00      1.00      1.00        27
+           V       1.00      0.91      0.95        32
 
-    accuracy                           0.93        83
-   macro avg       0.93      0.93      0.93        83
-weighted avg       0.93      0.93      0.93        83
+    accuracy                           0.96        83
+   macro avg       0.96      0.97      0.96        83
+weighted avg       0.97      0.96      0.96        83
 
 

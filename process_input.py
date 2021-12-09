@@ -40,10 +40,10 @@ def clean_data(file, data, user, age, hand, dominant_hand):
 
     # Counting peaks
     for x in data_cols:
-        upper = data_std[x] * 1.5
+        upper = (data_std[x] * 1.3)/2
         lower = upper * -1
 
-        # removing all the noise, only want highest peaks and lowest valleys
+        # Removing all the noise, only want highest peaks and lowest valleys
         peaks = data[(data[x] > upper) | (data[x] < lower)]
         peaks = peaks.reset_index()
 
