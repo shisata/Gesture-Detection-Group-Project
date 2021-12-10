@@ -7,7 +7,7 @@ from sklearn.decomposition import PCA
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, PolynomialFeatures, MinMaxScaler, FunctionTransformer
 from sklearn.pipeline import make_pipeline
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
@@ -213,14 +213,20 @@ def analyze_data():
     
     bayes_clf = GaussianNB()
     bayes_clf_pipeline = make_pipeline(
+        # PolynomialFeatures(),
+        # MinMaxScaler(),
         StandardScaler(),
+        # FunctionTransformer(),
         # PCA(10),
         GaussianNB()
     )
     
     knn_clf = KNeighborsClassifier(n_neighbors=7)
     knn_clf_pipeline = make_pipeline(
+        # PolynomialFeatures(),
+        # MinMaxScaler(),
         StandardScaler(),
+        # FunctionTransformer(),
         # PCA(10),
         KNeighborsClassifier(n_neighbors=7)
     )
@@ -228,14 +234,20 @@ def analyze_data():
     # nn_clf = MLPClassifier(random_state=1, max_iter=10000)
     nn_clf = MLPClassifier(solver='lbfgs', alpha=1e-3, hidden_layer_sizes=(6,), random_state=1, max_iter=10000)
     nn_clf_pipeline = make_pipeline(
+        # PolynomialFeatures(),
+        # MinMaxScaler(),
         StandardScaler(),
+        # FunctionTransformer(),
         # PCA(10),
         MLPClassifier(solver='lbfgs', alpha=1e-3, hidden_layer_sizes=(6,), random_state=1, max_iter=10000)
     )
     
     forest_clf = RandomForestClassifier(criterion="entropy")
     forest_clf_pipeline = make_pipeline(
+        # PolynomialFeatures(),
+        # MinMaxScaler(),
         StandardScaler(),
+        # FunctionTransformer(),
         # PCA(10),
         RandomForestClassifier(criterion="entropy")
     )
