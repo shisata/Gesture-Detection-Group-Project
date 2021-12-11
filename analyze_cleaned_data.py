@@ -2,6 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn
 from sklearn.decomposition import PCA
 
 from sklearn.model_selection import train_test_split
@@ -140,12 +141,69 @@ def plot_predictions(count, label):
     plt.savefig(output_folder + '/' + label)
     # plt.show()
     plt.close(fig)
-        
+
+# produces graphs for data transformations
+def plot_scatter_peaks():
+    seaborn.set()
+    data = pd.read_csv('input_data/user3/right-hand/draw_V_2.csv')
+    fsize = (10,5)
+
+    fig1 = plt.figure(figsize=fsize)
+    plt.plot(data['gFy'])
+    plt.xlabel('time (ms)')
+    plt.ylabel('g')
+    plt.title('Plotting Raw Data from g-Force y-axis')
+    plt.savefig(output_folder + '/' + 'plot_raw_sample_data')
+    plt.close(fig1)
+
+    fig2 = plt.figure(figsize=fsize)
+    plt.plot(data['gFy'])
+    plt.xlabel('time (ms)')
+    plt.ylabel('g')
+    plt.axhline(y=(data['gFy'].mean()+1.3*data['gFy'].std()), color='r', linestyle='-', label='upper std')
+    plt.axhline(y=(data['gFy'].mean()-1.3*data['gFy'].std()), color='r', linestyle='-', label='lower std')
+    plt.axhline(y=data['gFy'].mean(), color='g', linestyle=':', label='mean')
+    plt.legend()
+    plt.title('Plotting Raw Data from g-Force y-axis')
+    plt.savefig(output_folder + '/' + 'plot_raw_data_with_std_and_mean')
+    plt.close(fig2)
+
+    fig3 = plt.figure(figsize=fsize)
+    data = pd.read_csv('cleaned_data/result.csv')
+    drawings = ['O', 'S', 'V']
+    r=['r','g','b']
+    for i in range(3):
+        dots = data[data['shape'] == drawings[i]]
+        plt.scatter(dots['acc_x-std'], dots['acc_z-std'],color=r[i], label=drawings[i])
+    plt.title('Scatter for Standard Deviation in Linear Acceleration')
+    plt.xlabel('Standard Deviation of Linear Acceleration of X axis')
+    plt.ylabel('Standard Deviation of Linear Acceleration of Z axis')
+    plt.legend()
+    plt.savefig(output_folder + '/' + 'shape_scatter_in_linear_acc')
+    plt.close(fig3)
+
+    fig4 = plt.figure(figsize=fsize)
+    data = data[data['acc_x-std'] < 0.2]
+    for i in range(3):
+        dots = data[data['shape'] == drawings[i]]
+        plt.scatter(dots['acc_x-std'], dots['acc_z-std'],color=r[i], label=drawings[i])
+    plt.title('Scatter for Standard Deviation in Linear Acceleration')
+    plt.xlabel('Standard Deviation of Linear Acceleration of X axis')
+    plt.ylabel('Standard Deviation of Linear Acceleration of Z axis')
+    plt.legend()
+    plt.savefig(output_folder + '/' + 'focused_shape_scatter_in_linear_acc')
+    plt.close(fig4)
+
 def analyze_data():
     print("Reading processed data from " + input_folder + ": " + input_file)
     # TODO: read data from files
     data = pd.read_csv(input_folder + '/' + input_file)
     X, y = get_stacked_dataframe(data)
+    
+    # Making charts for data transformations
+    print('Exporting images for Data Transformations')
+    plot_scatter_peaks()
+
     # TODO: analyze
     X_train, X_test, y_train, y_test = train_test_split(X,y, test_size = 0.25, random_state = 1)
     
