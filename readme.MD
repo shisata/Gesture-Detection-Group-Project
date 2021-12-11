@@ -1,7 +1,7 @@
 # Gesture Detection
 
 ## What is this project about?
-This program analyzes the gesture that are in the shapes of S, V and O collected from phone. The data will be collected using Physics Toolbox Sensor Suite from many different participants in the form of csv files. From analyzing the data, it will be able to produce different prediction models as well as reports of them.
+This program analyzes the gesture motions that are in the shapes of S, V and O collected from phone. The data will be collected using Physics Toolbox Sensor Suite from many different participants in the form of csv files. From analyzing the data, it will be able to produce different prediction models as well as reports of them.
 
 ## How to run this project
  ```
