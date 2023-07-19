@@ -39,6 +39,6 @@ user3
  - analyzed_data will be where the program export the results of prediction, as well as the charts for each model. The report of models will be called `classification_report.txt`
 
 ## Contribution
-Balrick Gill
-Josh Tran
-Goeun Jang
+- Balrick Gill
+- Josh Tran
+- Goeun Jang
